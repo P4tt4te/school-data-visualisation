@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+---
+<Layout title="Graph poc">
+  <main id="svg_wrapper">
+    <svg id="d3_demo"></svg>
+  </main>
+</Layout>
+<script>
+import * as d3 from 'd3';
+const width = 960, height = 500;
+
+const x_scale = d3.scaleBand().range([0, width]).padding(0.1);
+const y_scale = d3.scaleLinear().range([height, 0]);
+
+const svg = d3.select("#d3_demo")
+    .attr("width", width)
+    .attr("height", height);
+
+const data =  [{
+  Population: 1000000000,
+  Name: "France"
+},{
+  Population: 1000000000,
+  Name: "France"
+},{
+  Population: 1000000000,
+  Name: "France"
+},{
+  Population: 1000000000,
+  Name: "France"
+},{
+  Population: 1000000000,
+  Name: "France"
+}]
+    
+	 data.forEach((d) => (d.Population = +d.Population));
+
+	 // Scale the Domain
+	 x_scale.domain(data.map((d) => d.Name));
+	 y_scale.domain([0, d3.max(data, (d) => d.Population)]);
+
+	 // add the rectangles for the bar chart
+	 svg
+	  .selectAll("rect")
+	  .data(data)
+	  .join("rect")
+	  .attr("class", "bar")
+	  .attr("x", (d) => x_scale(d.Name))
+	  .attr("y", (d) => y_scale(d.Population))
+	  .attr("width", x_scale.bandwidth())
+	  .attr("height", (d) => height - y_scale(d.Population));
+
+</script>
