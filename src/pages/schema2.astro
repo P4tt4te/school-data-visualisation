@@ -1,11 +1,27 @@
 ---
+import MenuBar from '../components/MenuBar.astro';
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Graph 2 poc">
+<Layout title="Évolution du taux de réussite total par département">
+    <MenuBar />
   <main>
-    <div id="gd"></div>
+    <div id="container">
+        <h2>Évolution du taux de réussite total par département</h2>
+        <div id="gd"></div>
+    </div>
   </main>
 </Layout>
+<style>
+    #container {
+        width: 98svw;
+        height: 98svh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 5px;
+    }
+</style>
 <script>
     import * as Plot from "@observablehq/plot";
     import { dsv } from "d3";

@@ -1,0 +1,45 @@
+---
+import MenuBar from '../components/MenuBar.astro';
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Évolution du nombre d'établissements par département">
+    <MenuBar />
+  <main>
+    <div id="container">
+        <h2>Évolution du nombre d'établissements par département</h2>
+        <div id="gd"></div>
+    </div>
+  </main>
+</Layout>
+<style>
+    #container {
+        width: 98svw;
+        height: 98svh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 5px;
+    }
+</style>
+<script>
+    import * as Plot from "@observablehq/plot";
+    import { dsv } from "d3";
+    const data = await dsv(";","/data/etablissement.csv", (d) => {
+    return {
+        annee: d.annee
+    }
+    });
+    console.log("data : ",data);
+
+    const graphic = Plot.plot({
+    y: {grid: true},
+    color: {legend: true},
+    marks: [
+        Plot.rectY(data, Plot.binX({y: "count"}, {x: "annee"}))
+    ]
+    });
+
+    const div = document.querySelector("#gd");
+    div && div.append(graphic);
+  </script>
