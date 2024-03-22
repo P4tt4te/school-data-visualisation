@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Graph 2 poc">
+  <main>
+    <div id="gd"></div>
+  </main>
+</Layout>
+<script>
+    import * as Plot from "@observablehq/plot";
+    import { dsv } from "d3";
+    const data = await dsv(";","/data/etablissement.csv", (d) => {
+    return {
+        annee: d.annee,
+        total: d.taux_brut_de_reussite_total_series
+    }
+    });
+    console.log("data : ",data)
+
+    //const graphic = Plot.hexagon(data, Plot.hexbin({fill: "sum"}, {x: "annee", y: "total", symbol: "square"})).plot({color: {scheme: "YlGnBu"}});
+    const graphic = Plot.plot({
+    r: {range: [0, 6]}, // generate slightly smaller dots
+    marks: [
+        Plot.dot(data, Plot.bin({r: "count"}, {x: "annee", y: "total"}))
+    ]
+    });
+
+    const div = document.querySelector("#gd");
+    div && div.append(graphic);
+  </script>

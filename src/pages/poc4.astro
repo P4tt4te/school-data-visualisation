@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Graph 2 poc">
+  <main>
+    <div id="gd"></div>
+  </main>
+</Layout>
+<script>
+    import Plotly from 'plotly.js-dist-min';
+    import * as d3 from "d3";
+
+    const data = await d3.dsv(";","/data/etablissement.csv", (d) => {
+    return {
+        etablissement: d.etablissement,
+        effectif: d.effectif_de_terminale
+    }
+    }).then((data) => chart(data));
+
+    function chart(data) {
+        const x = data.map((item) => item.etablissement);
+    const y = data.map((item) => item.effectif);
+    console.log(x, y)
+
+    Plotly.newPlot("gd", /* JSON object */ {
+            "data": [{ "y": y, "x" : x }],
+            "layout": { "width": window.innerWidth - 10, "height": window.innerHeight - 35}
+        })
+    }
+    
+  </script>
